@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spin the Wheel – Let's Talk About Jobs!</title>
+<style>
+:root{--navy:#102b50;--blue:#38a9e8;--sky:#dff4ff;--yellow:#ffd45c;--white:#fff;--ink:#173451;--muted:#5e7185;--line:#d9e8f2;--shadow:0 14px 35px rgba(16,43,80,.12)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#eaf8ff 0,#f8fcff 48%,#fff 100%);font-family:Inter,ui-rounded,"Trebuchet MS",Arial,sans-serif;color:var(--ink)}
+button{font:inherit;cursor:pointer}
+.hero{position:relative;overflow:hidden;background:linear-gradient(130deg,#102b50,#14558a 68%,#238ac4);color:white;padding:46px 20px 42px;text-align:center}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero:before{width:260px;height:260px;left:-80px;top:-120px}.hero:after{width:190px;height:190px;right:-55px;bottom:-100px}
+.hero-inner{position:relative;max-width:900px;margin:auto}
+.eyebrow{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:8px 15px;font-size:.78rem;font-weight:800;letter-spacing:1.4px}
+h1{font-size:clamp(2.2rem,6vw,4.6rem);line-height:1.02;margin:18px 0 8px;font-weight:950;letter-spacing:-1.5px}
+h1 span{color:var(--yellow)}
+.hero p{max-width:680px;margin:14px auto 22px;color:#e6f5ff;font-size:1.08rem;line-height:1.6}
+.primary,.secondary,.help-btn{border:0;border-radius:999px;padding:14px 25px;font-weight:900;transition:transform .2s,box-shadow .2s}
+.primary{background:var(--yellow);color:var(--navy);box-shadow:0 6px 0 #d9a92d,0 12px 22px #061b3244}
+.primary:hover,.secondary:hover,.help-btn:hover{transform:translateY(-2px)}
+.primary:active{transform:translateY(2px);box-shadow:0 3px 0 #d9a92d}
+main{max-width:1100px;margin:auto;padding:28px 18px 60px}
+.section-heading{text-align:center;margin:12px 0 22px}
+.section-heading .tag{color:#1687c4;font-size:.76rem;font-weight:900;letter-spacing:1.5px}
+.section-heading h2{font-size:clamp(1.6rem,4vw,2.35rem);margin:7px 0;color:var(--navy)}
+.section-heading p{margin:0;color:var(--muted);line-height:1.5}
+.howto{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px auto 34px;max-width:850px}
+.step{background:white;border:1px solid var(--line);border-radius:17px;padding:15px;text-align:center;box-shadow:0 5px 18px #163c5d0a}
+.step b{display:block;color:var(--navy);margin:5px 0}.step span{font-size:1.5rem}.step small{color:var(--muted);line-height:1.4}
+.wheel-card{max-width:760px;margin:auto;background:white;border:1px solid var(--line);border-radius:28px;padding:26px 18px 28px;box-shadow:var(--shadow);text-align:center}
+.wheel-wrap{position:relative;width:min( min(76vw,500px),100%);aspect-ratio:1;margin:0 auto 20px}
+#wheel{width:100%;height:100%;display:block;filter:drop-shadow(0 9px 9px rgba(16,43,80,.16));transform:rotate(0rad);transition:transform 5.2s cubic-bezier(.12,.78,.12,1)}
+.pointer{position:absolute;z-index:2;top:-8px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:19px solid transparent;border-right:19px solid transparent;border-top:38px solid var(--yellow);filter:drop-shadow(0 3px 2px #17345155)}
+.wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:white;border:7px solid var(--navy);display:grid;place-items:center;font-size:1.8rem;box-shadow:0 3px 10px #102b5030;pointer-events:none}
+.spin-btn{font-size:1.05rem;min-width:220px}
+.status{min-height:27px;margin:18px 0 0;color:var(--muted);font-weight:700}
+.result{display:none;margin:30px auto 0;max-width:900px;animation:rise .5s ease both}
+.result.show{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.job-card{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:center;background:white;border:2px solid #bde8fc;border-radius:24px;padding:22px;box-shadow:var(--shadow)}
+.job-art{min-height:200px;border-radius:19px;background:linear-gradient(145deg,#dff4ff,#fff4c8);display:grid;place-items:center;font-size:6rem}
+.job-label{font-size:.75rem;font-weight:900;letter-spacing:1.5px;color:#1687c4}
+.job-card h3{font-size:2rem;color:var(--navy);margin:6px 0}
+.job-desc{color:var(--muted);line-height:1.55;margin:0 0 12px}
+.responsibilities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:0;margin:0;list-style:none}
+.responsibilities li{background:#f0f9ff;border-radius:12px;padding:10px 12px;font-weight:700;font-size:.92rem;line-height:1.35}
+.responsibilities li:before{content:"✓";color:#1687c4;font-weight:1000;margin-right:7px}
+.speaking{margin-top:20px;background:var(--navy);color:white;border-radius:24px;padding:24px}
+.speaking h3{font-size:1.65rem;margin:0 0 7px}.speaking .instruction{color:#d9efff;margin:0 0 18px;line-height:1.5}
+.speaking-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.speech-panel{background:white;color:var(--ink);border-radius:17px;padding:17px}
+.speech-panel h4{margin:0 0 12px;color:var(--navy);font-size:1.05rem}
+.starters,.questions{display:grid;gap:8px}
+.starter{background:#edf8ff;border-left:4px solid var(--blue);border-radius:8px;padding:10px;font-size:.92rem;line-height:1.4;font-weight:700}
+.question{background:#fff7d9;border-radius:10px;padding:10px 12px;font-size:.91rem;line-height:1.35}
+.help-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:15px;flex-wrap:wrap}
+.help-btn{background:var(--yellow);color:var(--navy);padding:11px 17px}
+.help-examples{display:none;background:#fff;padding:15px;border-radius:14px;color:var(--ink);margin-top:13px}
+.help-examples.show{display:block}
+.help-examples p{margin:7px 0;line-height:1.45}
+.next-round{text-align:center;margin:25px auto 0;padding:25px;background:#e6f6ff;border:1px dashed #83cbed;border-radius:22px}
+.next-round h3{color:var(--navy);margin:0 0 7px;font-size:1.45rem}
+.next-round p{color:var(--muted);margin:0 0 16px}
+footer{text-align:center;color:#71879a;font-size:.82rem;padding:0 15px 28px}
+@media(max-width:700px){.howto{grid-template-columns:1fr}.job-card{grid-template-columns:1fr}.job-art{min-height:150px;font-size:5rem}.speaking-grid{grid-template-columns:1fr}.responsibilities{grid-template-columns:1fr 1fr}.wheel-card{padding:22px 12px}.wheel-wrap{width:min(84vw,440px)}}
+@media(max-width:420px){.responsibilities{grid-template-columns:1fr}.hero{padding-top:34px}.wheel-center{width:60px;height:60px;font-size:1.4rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="hero" id="top">
+ <div class="hero-inner">
+  <div class="eyebrow">YEAR 6 ENGLISH • SPEAKING CHALLENGE</div>
+  <h1>SPIN THE <span>WHEEL!</span></h1>
+  <div style="font-size:clamp(1.15rem,3vw,1.7rem);font-weight:900;color:#dff4ff">LET'S TALK ABOUT JOBS!</div>
+  <p>Hello, Future Explorers! Are you ready to discover exciting occupations? Spin the wheel, reveal a mystery job and tell us what people do!</p>
+  <button class="primary" onclick="document.getElementById('game').scrollIntoView({behavior:'smooth'})">LET'S PLAY! ↓</button>
+ </div>
+</header>
+<main id="game">
+ <div class="section-heading">
+  <div class="tag">HOW TO PLAY</div><h2>Three Steps to Become a Job Expert</h2>
+  <p>Take turns, look carefully and use complete English sentences.</p>
+ </div>
+ <div class="howto">
+  <div class="step"><span>🎡</span><b>1. Spin the Wheel</b><small>Take turns and discover a mystery occupation.</small></div>
+  <div class="step"><span>👀</span><b>2. Look and Learn</b><small>Study the picture and read the job responsibilities.</small></div>
+  <div class="step"><span>🎤</span><b>3. Speak Up!</b><small>Describe the job using complete sentences.</small></div>
+ </div>
+ <section class="wheel-card" aria-label="Interactive occupation wheel">
+  <div class="section-heading" style="margin:0 0 18px"><div class="tag">YOUR MYSTERY JOB AWAITS</div><h2>🎯 What Job Will You Get?</h2><p>Give the wheel a spin to find out!</p></div>
+  <div class="wheel-wrap">
+   <div class="pointer" aria-hidden="true"></div>
+   <canvas id="wheel" width="700" height="700" aria-label="Wheel with ten occupations"></canvas>
+   <div class="wheel-center">⭐</div>
+  </div>
+  <button id="spinButton" class="primary spin-btn">🎡 SPIN THE WHEEL</button>
+  <div class="status" id="status" aria-live="polite">Ready, Future Explorers? Let's spin!</div>
+ </section>
+ <section class="result" id="result" aria-live="polite">
+  <div class="job-card">
+   <div class="job-art" id="jobEmoji" aria-hidden="true">👩‍⚕️</div>
+   <div>
+    <div class="job-label">MYSTERY JOB REVEALED!</div>
+    <h3 id="jobTitle">Doctor</h3>
+    <p class="job-desc" id="jobDescription"></p>
+    <ul class="responsibilities" id="responsibilities"></ul>
+   </div>
+  </div>
+  <div class="speaking">
+   <h3>🎤 YOUR TURN TO SPEAK!</h3>
+   <p class="instruction">Look at the picture and explain what this person does. Use complete sentences!</p>
+   <div class="speaking-grid">
+    <div class="speech-panel">
+     <h4>💬 Sentence Starters</h4>
+     <div class="starters">
+      <div class="starter">A <span class="job-word">______</span> is a person who ______.</div>
+      <div class="starter">A <span class="job-word">______</span> works at/in ______.</div>
+      <div class="starter">He/She is responsible for ______.</div>
+      <div class="starter">He/She helps people by ______.</div>
+     </div>
+    </div>
+    <div class="speech-panel">
+     <h4>❓ Guiding Questions</h4>
+     <div class="questions">
+      <div class="question">1. What is the occupation?</div>
+      <div class="question">2. Where does this person work?</div>
+      <div class="question">3. What does this person do?</div>
+      <div class="question">4. Who does this person help?</div>
+      <div class="question">5. Why is this job important?</div>
+     </div>
+    </div>
+   </div>
+   <div class="help-row">
+    <span><strong>Need a little speaking support?</strong></span>
+    <button class="help-btn" id="helpButton">💡 NEED SOME HELP?</button>
+   </div>
+   <div class="help-examples" id="helpExamples"></div>
+  </div>
+  <div class="next-round">
+   <h3>🌟 READY FOR ANOTHER ROUND?</h3>
+   <p>Pass the turn to a friend and discover another exciting occupation!</p>
+   <button class="primary" id="againButton">🔄 SPIN AGAIN!</button>
+  </div>
+ </section>
+</main>
+<footer>Made for curious minds and confident speakers • Keep learning, keep exploring!</footer>
+<script>
+const jobs = [
+ {name:"Doctor",emoji:"🧑‍⚕️",description:"A doctor helps people who are sick or injured.",work:"at a hospital or clinic",tasks:["Treats sick and injured people","Examines patients","Gives medicine and health advice"],help:["A doctor treats sick people at a hospital.","A doctor examines patients and gives them medicine.","A doctor helps people stay healthy."]},
+ {name:"Teacher",emoji:"👩‍🏫",description:"A teacher helps pupils learn new knowledge and skills.",work:"at a school",tasks:["Teaches pupils new knowledge and skills","Explains lessons","Prepares classroom activities","Helps pupils learn"],help:["A teacher teaches pupils at school.","A teacher prepares lessons and classroom activities.","A teacher helps pupils learn new things."]},
+ {name:"Firefighter",emoji:"🧑‍🚒",description:"A firefighter keeps people safe during fires and emergencies.",work:"at a fire station and at emergency places",tasks:["Puts out fires","Rescues people from danger","Helps during emergencies"],help:["A firefighter puts out fires.","A firefighter rescues people from dangerous places.","A firefighter helps people during emergencies."]},
+ {name:"Police Officer",emoji:"👮",description:"A police officer protects people and helps keep communities safe.",work:"at a police station and in the community",tasks:["Protects the public","Keeps people safe","Enforces the law","Helps prevent crime"],help:["A police officer protects people in the community.","A police officer keeps people safe.","A police officer helps prevent crime."]},
+ {name:"Chef",emoji:"👩‍🍳",description:"A chef prepares and cooks meals for people to enjoy.",work:"in a restaurant or hotel kitchen",tasks:["Prepares and cooks food","Creates delicious meals","Keeps the kitchen clean"],help:["A chef prepares and cooks food.","A chef creates delicious meals in a kitchen.","A chef keeps the kitchen clean and safe."]},
+ {name:"Astronaut",emoji:"🧑‍🚀",description:"An astronaut travels into space to explore and learn about it.",work:"in a spacecraft or space station",tasks:["Travels into space","Explores planets and space","Conducts scientific experiments"],help:["An astronaut travels into space.","An astronaut explores planets and space.","An astronaut conducts experiments in space."]},
+ {name:"Scientist",emoji:"🧑‍🔬",description:"A scientist studies the world and discovers new information.",work:"in a laboratory or research centre",tasks:["Conducts experiments","Studies different subjects","Discovers new information"],help:["A scientist conducts experiments in a laboratory.","A scientist studies different subjects.","A scientist discovers new information through research."]},
+ {name:"Pilot",emoji:"👩‍✈️",description:"A pilot flies an aeroplane and takes passengers to different places.",work:"in an aeroplane",tasks:["Flies aeroplanes","Takes passengers to different destinations","Checks flight safety"],help:["A pilot flies an aeroplane.","A pilot takes passengers to different destinations.","A pilot checks that the flight is safe."]},
+ {name:"Photographer",emoji:"📸",description:"A photographer uses a camera to capture pictures and special moments.",work:"in many places, such as studios or outdoors",tasks:["Takes photographs","Captures important moments","Uses cameras to create beautiful pictures"],help:["A photographer takes photographs with a camera.","A photographer captures important moments.","A photographer takes pictures at different places."]},
+ {name:"Farmer",emoji:"🧑‍🌾",description:"A farmer grows food and takes care of farm animals.",work:"on a farm",tasks:["Grows crops and vegetables","Takes care of farm animals","Produces food for people"],help:["A farmer grows crops and vegetables.","A farmer takes care of farm animals.","A farmer produces food for people."]}
+];
+const colors=["#2D9CDB","#F5B83D","#58B68A","#E87979","#8B78D6","#36B9B0","#E58B43","#4F83CC","#D875AE","#83A84D"];
+const canvas=document.getElementById("wheel"),ctx=canvas.getContext("2d"),spinButton=document.getElementById("spinButton");
+const TAU=Math.PI*2,segment=TAU/jobs.length,start=-Math.PI/2;
+let rotation=0,spinning=false,selected=null;
+function drawWheel(){
+ const c=canvas.width/2,r=canvas.width/2-12;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ jobs.forEach((job,i)=>{
+  const a=start+i*segment,b=a+segment;
+  ctx.beginPath();ctx.moveTo(c,c);ctx.arc(c,c,r,a,b);ctx.closePath();
+  ctx.fillStyle=colors[i];ctx.fill();ctx.lineWidth=5;ctx.strokeStyle="#fff";ctx.stroke();
+  const mid=a+segment/2;
+  ctx.save();ctx.translate(c+Math.cos(mid)*r*.67,c+Math.sin(mid)*r*.67);ctx.rotate(mid+Math.PI/2);
+  ctx.textAlign="center";ctx.textBaseline="middle";ctx.font="42px Arial";ctx.fillText(job.emoji,0,-12);
+  ctx.font="bold 19px Arial";ctx.fillStyle="#102b50";ctx.fillText(job.name,0,24,115);
+  ctx.restore();
+ });
+ ctx.beginPath();ctx.arc(c,c,48,0,TAU);ctx.fillStyle="#fff";ctx.fill();ctx.lineWidth=8;ctx.strokeStyle="#102b50";ctx.stroke();
+}
+function mod(n,m){return ((n%m)+m)%m}
+function showJob(job){
+ selected=job;
+ document.getElementById("jobEmoji").textContent=job.emoji;
+ document.getElementById("jobTitle").textContent=job.name;
+ document.getElementById("jobDescription").textContent=job.description;
+ const list=document.getElementById("responsibilities");list.innerHTML="";
+ job.tasks.forEach(task=>{const li=document.createElement("li");li.textContent=task;list.appendChild(li)});
+ document.querySelectorAll(".job-word").forEach(el=>el.textContent=job.name.toLowerCase());
+ const examples=document.getElementById("helpExamples");examples.innerHTML="<strong>Here are some ways to describe this job:</strong>";
+ job.help.forEach(line=>{const p=document.createElement("p");p.textContent="💬 "+line;examples.appendChild(p)});
+ examples.classList.remove("show");document.getElementById("helpButton").textContent="💡 NEED SOME HELP?";
+ document.getElementById("result").classList.add("show");
+ document.getElementById("result").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function spin(){
+ if(spinning)return;
+ spinning=true;selected=null;document.getElementById("result").classList.remove("show");
+ document.getElementById("status").textContent="The wheel is spinning... Who will you discover?";
+ spinButton.disabled=true;spinButton.textContent="✨ SPINNING...";
+ const index=Math.floor(Math.random()*jobs.length);
+ const center=start+(index+.5)*segment;
+ const desired=mod(-Math.PI/2-center,TAU);
+ const current=mod(rotation,TAU);
+ const extraTurns=(5+Math.floor(Math.random()*3))*TAU;
+ const delta=mod(desired-current,TAU)+extraTurns;
+ rotation+=delta;
+ canvas.style.transform=`rotate(${rotation}rad)`;
+ const finish=()=>{
+  canvas.removeEventListener("transitionend",finish);
+  spinning=false;spinButton.disabled=false;spinButton.textContent="🎡 SPIN THE WHEEL";
+  document.getElementById("status").textContent="🎉 You got "+jobs[index].name+"! Let's talk about this job.";
+  showJob(jobs[index]);
+  try{const AudioContext=window.AudioContext||window.webkitAudioContext;if(AudioContext){const ac=new AudioContext();[660,880].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(.0001,ac.currentTime+i*.12);g.gain.exponentialRampToValueAtTime(.12,ac.currentTime+i*.12+.02);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+i*.12+.18);o.start(ac.currentTime+i*.12);o.stop(ac.currentTime+i*.12+.2)});}}catch(e){}
+ };
+ canvas.addEventListener("transitionend",finish,{once:true});
+ // Fallback for browsers that do not fire transitionend.
+ setTimeout(()=>{if(spinning){canvas.dispatchEvent(new Event("transitionend"))}},5600);
+}
+spinButton.addEventListener("click",spin);
+document.getElementById("againButton").addEventListener("click",()=>{document.getElementById("result").classList.remove("show");document.getElementById("helpExamples").classList.remove("show");document.getElementById("status").textContent="Ready for another round?";document.getElementById("game").scrollIntoView({behavior:"smooth"});});
+document.getElementById("helpButton").addEventListener("click",()=>{const box=document.getElementById("helpExamples");const visible=box.classList.toggle("show");document.getElementById("helpButton").textContent=visible?"🙈 HIDE EXAMPLES":"💡 NEED SOME HELP?";});
+drawWheel();
+</script>
+</body>
+</html>
